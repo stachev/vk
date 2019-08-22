@@ -22,12 +22,17 @@ data=response.json()
 def vk():
 
 	vk_session=vk_api.VkApi(token=token)
-	# mesages=vk_session.method("mesages.Getconversation")
-	# vk.auth_token()
-	vk=vk_session.get_api()
-	longpol = vk_api.longpoll.VkLongPoll(vk_session, wait=25, mode=234, preload_messages=False, group_id=185761879)
-	# vk_session.method('messages.send',)
-	# print(vk)
+	session_api=vk_session.get_api()
+	# session_api=vk_session.auth()
+	print(session_api)
+
+	messages=session_api.method("messages.getConversations",{'ofset':0, 'count':20,'filter':'inread'})
+	# # mesages=vk_session.method("mesages.Getconversation")
+	# # vk.auth_token(
+	# vk=vk_session.get_api()
+	# longpoll = vk_api.longpoll.VkLongPoll(vk, wait=25, mode=234, preload_messages=False, group_id=185761879)
+	# # vk_session.method('messages.send',)
+	# # print(vk)
 
 
 # print(Style.DIM)
