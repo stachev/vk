@@ -9,6 +9,7 @@ from vk_api import VkUpload
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.utils import get_random_id
 import time
+import json
 # from colorama import init
 # init()
 #https://oauth.vk.com/authorize?client_id=7095516&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=messages,offline&response_type=token&v=5.101'
@@ -20,6 +21,13 @@ method='notifications.get'
 
 response=requests.get('https://api.vk.com/method/'+method,params={'access_token':token,'v':version})
 data=response.json()
+
+def get_button(label, color, payload=""):
+    return {"action": {"type": "text","payload": json.dumps(payload),"label": label},"color": color}
+keyboard = {"one_time": False,"buttons": [[get_button(label="привет", color="primary"),get_button(label="как дела", color="negative")],[get_button(label="я люблю вк", color="positive"),get_button(label="develom", color="default")]]}
+
+keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+keyboard = str(keyboard.decode('utf-8'))
 
 def vk():
 
@@ -43,6 +51,8 @@ def vk():
 					vk_session.method("messages.send",{"peer_id":user, "message":"Отвянь от меня","random_id":random.randint(1,2121212121)})
 				elif body.lower()=="как дела":
 					vk_session.method("messages.send",{"peer_id":user, "message":"Уже лучше","random_id":random.randint(1,2121212121)})
+				elif body.lower() == "кнопки":
+					vk_session.method("messages.send", {"peer_id": user, "keyboard": keyboard,"message": "вот и они", "random_id": random.randint(1,2121212121)})
 				else:
 					vk_session.method("messages.send",{"peer_id":user, "message":'Я ТЕБЯ НЕ ПОНЯЛ',"random_id":random.randint(1,2121212121)})
 		except Exception:
