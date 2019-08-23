@@ -2,6 +2,7 @@
 from colorama import Fore, Back, Style
 import requests
 import tok
+import pogoda
 
 import vk_api
 import random
@@ -24,7 +25,7 @@ data=response.json()
 
 def get_button(label, color, payload=""):
     return {"action": {"type": "text","payload": json.dumps(payload),"label": label},"color": color}
-keyboard = {"one_time": False,"buttons": [[get_button(label="привет", color="primary"),get_button(label="как дела", color="negative")],[get_button(label="я люблю вк", color="positive"),get_button(label="develom", color="default")]]}
+keyboard = {"one_time": False,"buttons": [[get_button(label="привет", color="primary"),get_button(label="как дела", color="negative")],[get_button(label="Погода", color="positive"),get_button(label="develom", color="default")]]}
 
 keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
 keyboard = str(keyboard.decode('utf-8'))
@@ -37,6 +38,7 @@ def vk():
 	# session_api=vk_session.auth()
 	# print(session_api)
 	mes="И тебе привет"
+	water=pogoda.test()
 	while True:
 		try:
 			messages=vk_session.method("messages.getConversations",{'ofset':0, 'count':20,'filter':'unread'})
@@ -51,6 +53,8 @@ def vk():
 					vk_session.method("messages.send",{"peer_id":user, "message":"Отвянь от меня","random_id":random.randint(1,2121212121)})
 				elif body.lower()=="как дела":
 					vk_session.method("messages.send",{"peer_id":user, "message":"Уже лучше","random_id":random.randint(1,2121212121)})
+				elif body.lower()=="погода":
+					vk_session.method("messages.send",{"peer_id":user, "message":water,"random_id":random.randint(1,2121212121)})
 				elif body.lower() == "кнопки":
 					vk_session.method("messages.send", {"peer_id": user, "keyboard": keyboard,"message": "вот и они", "random_id": random.randint(1,2121212121)})
 				else:
